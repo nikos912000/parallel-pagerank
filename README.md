@@ -7,7 +7,7 @@ A serial and a parallel implementation of Pagerank algorithm, in C, using Pthrea
 
 How to use
 ----------
-1. Download a graph to use (eg. web-Google.txt from [here][google-graph])
+1. Download a graph to use (eg. web-Google.txt from [here][google-graph]) and remove all lines before the node pairs
 2. Run `make` command in a unix-based system
 3. Run the executable given the appropriate arguments
 
