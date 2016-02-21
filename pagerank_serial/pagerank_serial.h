@@ -13,4 +13,3 @@ typedef struct
   int *To_id;
   int con_size;
 }Node;
-}Node;
