@@ -1,0 +1,6 @@
+# Exclude exec files
+pagerank_serial
+pagerank_pthreads
+
+Exlude MacOS files
+.DS_Store
