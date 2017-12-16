@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/time.h>
 #include <math.h>
 #include <assert.h>
 #include <string.h>
@@ -114,14 +115,16 @@ void Read_from_txt_file(char* filename)
 
     int from_idx, to_idx;
 	int temp_size;
+	char line[1000];
 
     fid = fopen("web-Google.txt", "r");
    	if (fid == NULL){printf("Error opening the file\n");}
 
 	while (!feof(fid))
 	{
-		
-		if (fscanf(fid,"%d\t%d\n", &from_idx, &to_idx))
+		fgets(line, sizeof(line), fid);
+		// ignore sentences starting from #
+		if (sscanf(line,"%d\t%d\n", &from_idx, &to_idx))
 		{
 			Nodes[from_idx].con_size++;
 			Nodes[to_idx].from_size++;
@@ -249,7 +252,7 @@ void* P_reinit(void* arg)
 			Nodes[i].p_t0 = Nodes[i].p_t1;	
 			Nodes[i].p_t1 = 0;
 	}
-
+	return 0;
 }
 
 /***** Main parallel algorithm *****/
@@ -286,6 +289,7 @@ void* Pagerank_Parallel(void* arg)
 	pthread_mutex_lock(&locksum);
 	sum = sum + temp_sum; 
 	pthread_mutex_unlock(&locksum);
+	return 0;
 }
 
 /***** Compute local max (thread's data max) *****/
@@ -318,7 +322,7 @@ void* Local_Max(void* arg)
 		max_error = temp_max;		
 	}	
 	pthread_mutex_unlock(&lockmax);	
-
+	return 0;
 }
 
 /***** Pagerank main algortihm *****/

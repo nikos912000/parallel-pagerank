@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <sys/time.h>
 #include <math.h>
 #include <assert.h>
 #include <string.h>
@@ -34,20 +35,24 @@ void Read_from_txt_file(char* filename)
 
     int from_idx, to_idx;
 	int temp_size;
+    char line[1000];
 
     fid = fopen(filename, "r");
    	if (fid == NULL){printf("Error opening data file\n");}
 
 	while (!feof(fid))
 	{
-		
-		if (fscanf(fid,"%d\t%d\n", &from_idx,&to_idx))
-		{
-			Nodes[from_idx].con_size++;
-			temp_size = Nodes[from_idx].con_size;
-			Nodes[from_idx].To_id =(int*) realloc(Nodes[from_idx].To_id, temp_size * sizeof(int));
-			Nodes[from_idx].To_id[temp_size - 1] = to_idx;
-		}
+        fgets(line, sizeof(line), fid);
+        // ignore sentences starting from #
+        if (strncmp(line, "#", 1) != 0) {
+            if (sscanf(line,"%d\t%d\n", &from_idx,&to_idx))
+            {
+                Nodes[from_idx].con_size++;
+                temp_size = Nodes[from_idx].con_size;
+                Nodes[from_idx].To_id =(int*) realloc(Nodes[from_idx].To_id, temp_size * sizeof(int));
+                Nodes[from_idx].To_id[temp_size - 1] = to_idx;
+            }
+        }
 	}
 
 	printf("End of connections insertion!\n");
